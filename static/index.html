@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d1420">
+  <meta name="description" content="Dashboard giám sát tài nguyên máy chủ theo thời gian thực.">
+  <title>Server Monitor</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Điều hướng chính">
+      <a class="brand" href="/" aria-label="Server Monitor"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01M12 6.5h5M12 17.5h5"/></svg></span><span>SERVER<span class="brand-secondary">MONITOR</span></span></a>
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="navigation">
+        <button class="nav-button active" data-page="dashboard" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Dashboard</button>
+        <button class="nav-button" data-page="performance"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18a9 9 0 1 1 16 0M12 12l5-5M4 18h3M17 18h3"/><circle cx="12" cy="12" r="1"/></svg>Performance</button>
+      </nav>
+      <div class="sidebar-note"><span class="note-dot"></span><div>Giám sát trực tiếp<span>Tài nguyên của máy chủ này</span></div></div>
+      <div class="sidebar-footer"><div class="server-avatar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="8" rx="2"/><rect x="4" y="14" width="16" height="7" rx="2"/><path d="M8 7h.01M8 17.5h.01M12 7h4M12 17.5h4"/></svg></div><div class="server-identity"><strong id="sidebar-host">Đang kết nối…</strong><span id="sidebar-address">Máy chủ nội bộ</span></div><span class="host-dot" id="sidebar-status"></span></div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar"><div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-divider">/</span><strong id="breadcrumb-current">Dashboard</strong></div><div class="topbar-actions"><span class="connection-state" id="connection-state" role="status"><span class="status-dot"></span><span id="connection-text">Đang kết nối</span></span><div class="toolbar-divider"></div><button class="icon-button pause-button" id="pause-button" title="Tạm dừng hiển thị" aria-label="Tạm dừng hiển thị"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14M15 5v14"/></svg><span>Tạm dừng</span></button></div></header>
+      <main id="main-content">
+        <div class="notice" id="connection-notice" role="status" hidden></div>
+        <section id="dashboard-page" class="page" aria-label="Dashboard">
+          <div class="page-heading"><div><div class="eyebrow">SERVER OVERVIEW</div><h1>Toàn cảnh máy chủ<span class="live-badge"><span></span>LIVE</span></h1><p>Theo dõi hệ thống và tài nguyên theo thời gian thực.</p></div><div class="heading-time"><span>Cập nhật gần nhất</span><strong id="dashboard-updated">—</strong></div></div>
+          <div class="server-banner"><div class="server-banner-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="8" rx="2"/><rect x="4" y="14" width="16" height="7" rx="2"/><path d="M8 7h.01M8 17.5h.01M12 7h4M12 17.5h4"/></svg></div><div class="banner-identity"><h2 id="server-hostname">Đang lấy thông tin máy chủ</h2><p id="server-os">Chờ dữ liệu từ hệ thống…</p></div><div class="banner-stat"><span>Địa chỉ IP</span><strong id="server-ip">—</strong></div><div class="banner-stat"><span>Thời gian hoạt động</span><strong id="server-uptime">—</strong></div><div class="server-online"><span class="status-dot"></span><span id="server-online-text">Đang kết nối</span></div></div>
+          <div class="summary-grid" id="summary-grid"></div>
+          <div class="dashboard-grid">
+            <article class="panel usage-panel"><div class="panel-heading"><div><h2>Tải tài nguyên</h2><p>CPU và bộ nhớ trong 60 giây gần nhất</p></div><div class="chart-legend"><span><i class="legend-dot cpu-color"></i>CPU</span><span><i class="legend-dot memory-color"></i>Bộ nhớ</span></div></div><div class="chart-host overview-chart" id="overview-chart"></div><div class="chart-footer"><span>60 giây trước</span><span class="chart-hint">Di chuột để xem chi tiết</span><span>Hiện tại</span></div></article>
+            <article class="panel system-panel"><div class="panel-heading"><div><h2>Thông tin hệ thống</h2><p>Cấu hình phần cứng và hệ điều hành</p></div><span class="panel-icon" data-icon="server"></span></div><dl class="system-details" id="system-details"></dl></article>
+            <article class="panel storage-panel"><div class="panel-heading"><div><h2>Không gian lưu trữ</h2><p>Các phân vùng đang được gắn kết</p></div><span class="panel-icon" data-icon="disk"></span></div><div id="storage-list" class="storage-list"><p class="empty-state">Đang lấy thông tin phân vùng…</p></div></article>
+            <article class="panel network-panel"><div class="panel-heading"><div><h2>Lưu lượng mạng</h2><p>Tổng băng thông các giao diện mạng</p></div><span class="panel-icon" data-icon="network"></span></div><div class="network-totals"><div><span><i class="legend-dot network-color"></i>Nhận</span><strong id="network-recv">—</strong></div><div><span><i class="legend-dot teal-color"></i>Gửi</span><strong id="network-sent">—</strong></div></div><div class="chart-host network-chart" id="network-overview-chart"></div><div id="network-interface-list" class="interface-list"></div></article>
+            <article class="panel processes-panel"><div class="panel-heading"><div><h2>Tiến trình sử dụng CPU cao nhất</h2><p id="processes-summary">Đang lấy thông tin tiến trình…</p></div><span class="panel-icon" data-icon="activity"></span></div><div class="table-scroll"><table><thead><tr><th>Tiến trình</th><th>PID</th><th>CPU</th><th>Bộ nhớ</th><th>Trạng thái</th></tr></thead><tbody id="process-table-body"><tr><td colspan="5" class="empty-state">Đang tải…</td></tr></tbody></table></div></article>
+          </div>
+        </section>
+        <section id="performance-page" class="page" aria-label="Performance" hidden>
+          <div class="page-heading"><div><div class="eyebrow">RESOURCE INSIGHTS</div><h1>Hiệu suất máy chủ<span class="live-badge"><span></span>LIVE</span></h1><p>Khám phá từng tài nguyên với dữ liệu trực tiếp từ hệ thống.</p></div><div class="heading-time"><span>Cập nhật mỗi giây</span><strong id="performance-updated">—</strong></div></div>
+          <div class="performance-layout"><div class="resource-selector" id="resource-selector" role="tablist" aria-label="Chọn tài nguyên" aria-orientation="vertical"></div><div class="performance-main"><article class="panel performance-chart-panel" id="resource-detail" role="tabpanel" aria-labelledby="resource-cpu"><div class="performance-chart-heading"><div><span class="eyebrow" id="resource-eyebrow">PROCESSOR</span><h2 id="resource-title">CPU</h2><p id="resource-subtitle">Đang lấy thông tin bộ xử lý…</p></div><div class="resource-current"><strong id="resource-current">—</strong><span id="resource-current-label">Mức sử dụng</span></div></div><div class="detail-chart-top"><span id="detail-chart-unit">% sử dụng</span><div class="chart-legend" id="detail-chart-legend"></div></div><div class="chart-host detail-chart" id="detail-chart"></div><div class="chart-footer"><span>60 giây trước</span><span class="chart-hint">Di chuột để xem chi tiết</span><span>Hiện tại</span></div><div class="detail-stats" id="detail-stats"></div></article><article class="panel resource-extra-panel"><div class="panel-heading"><div><h2 id="resource-extra-title">Hoạt động từng lõi</h2><p id="resource-extra-subtitle">Mức sử dụng các bộ xử lý logic</p></div><span class="panel-icon" id="resource-extra-icon"></span></div><div id="resource-extra"></div></article></div></div>
+        </section>
+        <details class="collection-notes" id="collection-notes" hidden><summary>Ghi chú thu thập dữ liệu <span id="collection-note-count"></span></summary><ul id="collection-note-list"></ul></details>
+        <footer class="page-footer"><span><span class="footer-dot"></span>Dữ liệu được thu thập trực tiếp trên máy chủ</span><span>SERVER MONITOR <span class="footer-version">v0.1.0</span></span></footer>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
